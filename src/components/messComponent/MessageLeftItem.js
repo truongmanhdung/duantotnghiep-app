@@ -15,17 +15,17 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 10,
-    color: 'white',
+    color: 'black',
     maxWidth: 200,
     marginLeft: 5
   },
 });
 function MessageLeftItem(props) {
-  const {message} = props;
+  const {message, avatar} = props;
   return (
     <TouchableOpacity activeOpacity={0.8} style={styles.container}>
       <View>
-        <Avatar width={25} height={25} />
+        <Avatar uri={avatar} width={25} height={25} />
       </View>
       <Text style={[styles.text, {backgroundColor: message.color}]}>
         {message.content}

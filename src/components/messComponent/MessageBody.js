@@ -10,7 +10,8 @@ const data = [
         message: 'Alo tao là Dũng đây',
         checked: true,
         firstName: 'Dũng',
-        timeLine: '20:36'
+        timeLine: '20:36',
+        color: '#669999',
     },
     {
         id: 2,
@@ -19,7 +20,8 @@ const data = [
         message: 'Mình là Vân Anh nè',
         checked: false,
         firstName: 'Anh',
-        timeLine: '10:48'
+        timeLine: '10:48',
+        color: '#669999',
     },
     {
         id: 3,
@@ -28,7 +30,8 @@ const data = [
         message: 'Mình là Linh học giỏi đây',
         checked: false,
         firstName: 'Linh',
-        timeLine: '09:20'
+        timeLine: '09:20',
+        color: '#669999',
     },
     {
         id: 4,
@@ -37,7 +40,8 @@ const data = [
         message: 'Mình là Hải nè Mình là Hải nè Mình là Hải nè Mình là Hải nè',
         checked: false,
         firstName: 'Hải',
-        timeLine: '07:20'
+        timeLine: '07:20',
+        color: '#669999',
     },
 ]
 function MessageBody(props) {

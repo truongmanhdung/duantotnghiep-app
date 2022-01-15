@@ -218,7 +218,7 @@ function HomeScreen(props) {
                 <View style={{alignItems: 'center', width: '100%'}}>
                   <Image
                     style={{width: 100, height: 100, alignItems: 'center'}}
-                    source={ImageGau}
+                    source={{uri: 'https://cdn.pixabay.com/photo/2016/12/22/13/45/bee-1925504_960_720.png'}}
                   />
                 </View>
                 <View

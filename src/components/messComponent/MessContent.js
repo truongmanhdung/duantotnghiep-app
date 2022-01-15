@@ -9,7 +9,7 @@ const data = [
   {
     id: 1,
     content: 'alo bsdasd adsdasdadds sad sddsdsa sadsadsa saddsa ',
-    color: '#00ccff',
+    color: '#e6e6eb',
     checked: true,
   },
   {
@@ -24,17 +24,72 @@ const data = [
     color: '#669999',
     checked: false,
   },
+  {
+    id: 4,
+    content: 'alo bsdasd adsdasdadds sad sddsdsa sadsadsa saddsa ',
+    color: '#e6e6eb',
+    checked: true,
+  },
+  {
+    id: 21,
+    content: 'sdadsadsadsa',
+    color: '#669999',
+    checked: false,
+  },
+  {
+    id: 35,
+    content: 'saddsd',
+    color: '#669999',
+    checked: false,
+  },
+  {
+    id: 13,
+    content: 'alo bsdasd adsdasdadds sad sddsdsa sadsadsa saddsa ',
+    color: '#e6e6eb',
+    checked: true,
+  },
+  {
+    id: 25,
+    content: 'sdadsadsadsa',
+    color: '#669999',
+    checked: false,
+  },
+  {
+    id: 36,
+    content: 'saddsd',
+    color: '#669999',
+    checked: false,
+  },
+  {
+    id: 17,
+    content: 'alo bsdasd adsdasdadds sad sddsdsa sadsadsa saddsa ',
+    color: '#e6e6eb',
+    checked: true,
+  },
+  {
+    id: 299,
+    content: 'sdadsadsadsa',
+    color: '#669999',
+    checked: false,
+  },
+  {
+    id: 355,
+    content: 'saddsd',
+    color: '#669999',
+    checked: false,
+  },
 ];
 
 const styles = StyleSheet.create({
   message: {},
 });
 function MessContent(props) {
+  const {messagedata} = props;
   return (
     <View style={styles.message}>
       {data.map(item =>
         item.checked ? (
-          <MessageLeftItem key={item.id} message={item} />
+          <MessageLeftItem key={item.id} message={item} avatar={messagedata.avatar} />
         ) : (
           <MessageRightItem key={item.id} message={item} />
         ),
@@ -43,6 +98,8 @@ function MessContent(props) {
   );
 }
 
-MessContent.propTypes = {};
+MessContent.propTypes = {
+  messagedata: PropTypes.object,
+};
 
 export default MessContent;

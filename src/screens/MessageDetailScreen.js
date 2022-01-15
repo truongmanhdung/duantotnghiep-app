@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
   ScrollView,
@@ -6,6 +6,8 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TextInput,
+  Keyboard,
 } from 'react-native';
 import MessContent from '../components/messComponent/MessContent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -21,10 +23,6 @@ const styles = StyleSheet.create({
   modalView: {
     position: 'absolute',
     top: 50,
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    // height: 300,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -57,11 +55,64 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  bottom: {
+    padding: 14,
+    paddingBottom: 10,
+    paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white'
+  },
+  viewInput: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#e6e6eb',
+    borderRadius: 20,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 3,
+    paddingBottom: 3,
+  },
+  input: {
+    paddingVertical: 0,
+    width: "85%",
+  },
+  flex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: 150,
+  },
+  icon: {
+    
+  }
 });
 function MessageDetailScreen(props) {
   const {route} = props;
   const {message} = route.params;
   const navigation = useNavigation();
+  const [isFocus, setIsFocus] = useState(false);
+  const showDetail = () => {
+    setIsFocus(false);
+  }
+  const onFocusInput = () => {
+    setIsFocus(true);
+  };
+
+  const keyboardDidHide = () => {
+    setIsFocus(false);
+  }
+
+  useEffect(() => {
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide)
+    return () => {
+      keyboardDidHideListener.remove()
+    }
+  }, [])
+
+
   return (
     <View style={styles.container}>
       <View style={styles.viewHeader}>
@@ -79,17 +130,42 @@ function MessageDetailScreen(props) {
           </View>
         </View>
         <View style={styles.avatar}>
-            <TouchableOpacity activeOpacity={0.8}>
-                <FontAwesome style={styles.iconAdd} name="phone" size={24} />
-            </TouchableOpacity>
-            <TouchableOpacity style={{marginLeft: 10}} activeOpacity={0.8}>
-                <FontAwesome style={styles.iconAdd} name="video-camera" size={24} />
-            </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8}>
+            <FontAwesome style={styles.iconAdd} name="phone" size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginLeft: 10}} activeOpacity={0.8}>
+            <FontAwesome style={styles.iconAdd} name="video-camera" size={24} />
+          </TouchableOpacity>
         </View>
       </View>
       <ScrollView style={styles.content}>
-        <MessContent />
+        <MessContent messagedata={message} />
       </ScrollView>
+
+      <View style={styles.bottom}>
+        {isFocus ? (
+          <TouchableOpacity onPress={showDetail}>
+            <AntDesign name="right" size={20} style={{color: message.color}} />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.flex}>
+            <AntDesign style={styles.icon} name="pluscircle" size={20} style={{color: message.color}} />
+            <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="camera" />
+            <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="image" />
+            <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="microphone" />
+          </View>
+        )}
+        <View style={[styles.viewInput, isFocus ? {width: '82%'} : {width: '40%'}]}>
+          <TextInput
+            
+            style={styles.input}
+            onFocus={onFocusInput}
+            placeholder="Aa"
+          />
+          <AntDesign name="meho" size={20} style={{color: message.color}} />
+        </View>
+        <AntDesign name="like1" size={20} style={{color: message.color}} />
+      </View>
     </View>
   );
 }

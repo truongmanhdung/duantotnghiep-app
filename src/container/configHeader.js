@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
 });
 function ConfigHeader(props) {
   const navigation = useNavigation();
+  
   return (
     <View style={styles.header}>
       <View style={styles.image}>
