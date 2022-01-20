@@ -1,6 +1,12 @@
 import React, {memo, useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import Avatar from '../components/avatarComponent/Avatar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -11,28 +17,29 @@ import MessageNew from '../components/messComponent/messageNew';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   modalView: {
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#fff',
+    alignSelf: 'center',
+    marginHorizontal: 6,
     position: 'absolute',
-    top: 50,
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
-    // height: 300,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    paddingVertical: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    borderRadius: 13,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: '#a5a5a54f',
+    margin: 0,
+    height: '95%'
   },
+
   viewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -41,15 +48,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   iconAdd: {
-    color: '#66ccff'
+    color: '#66ccff',
   },
   chatText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
   },
-  content: {
-    
+  content: {},
+  textModal: {
+    width: 60
+  },
+  textHeaderModal: {
+    padding: 10,
+    color: 'blue',
+    textAlign: 'center',
+    fontWeight: 'bold',
   }
 });
 const user = {
@@ -67,7 +81,13 @@ function MessScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.viewHeader}>
-        <Avatar uri={user.uri} width={35} height={35} onShowModal={onShowModal} />
+        <TouchableOpacity onPress={onShowModal}>
+          <Avatar
+            uri={user.uri}
+            width={35}
+            height={35}
+          />
+        </TouchableOpacity>
         <Text style={styles.chatText}>Chat</Text>
         <TouchableOpacity activeOpacity={0.8}>
           <AntDesign style={styles.iconAdd} name="form" size={24} />
@@ -78,16 +98,40 @@ function MessScreen(props) {
         <MessageNew />
         <MessageBody />
       </ScrollView>
-    
+
       {isShowModal && (
         <Modal
+          style={{margin: 0}}
           onModalHide={onShowModal}
+          visible={true}
+          useNativeDriver={true}
           onBackdropPress={onShowModal}
-          visible={true}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
+          onBackButtonPress={onShowModal}
+          isVisible={true}
+          backdropColor="null"
+          hasBackdrop={true}>
+          <View style={styles.modalView}>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <TouchableOpacity onPress={onShowModal} style={styles.textModal}>
+                <Text style={styles.textHeaderModal}>Xong</Text>
+              </TouchableOpacity>
             </View>
+            <ScrollView>
+              <View style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: 10}}>
+                <Avatar
+                  uri={user.uri}
+                  width={80}
+                  height={80}
+                  onShowModal={onShowModal}
+                />
+              </View>
+              <Text style={{fontSize: 24, fontWeight: 'bold', color: 'black', textAlign: 'center', margin: 5}}>{user.name}</Text>
+              <View>
+                <View style={{flexDirection: 'row', alignItems: 'center', }}>
+
+                </View>
+              </View>
+            </ScrollView>
           </View>
         </Modal>
       )}

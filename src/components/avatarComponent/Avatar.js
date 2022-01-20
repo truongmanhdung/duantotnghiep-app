@@ -9,7 +9,6 @@ import {
   Modal,
 } from 'react-native';
 
-
 const styles = StyleSheet.create({
   avatar: {
     borderRadius: 50,
@@ -22,27 +21,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 300,
   },
-  
 });
 function Avatar(props) {
-  const {onShowModal, width, height, uri} = props;
+  const {width, height, uri} = props;
   return (
     <View>
-      <TouchableOpacity onPress={onShowModal} activeOpacity={0.4}>
+      <View>
         <Image
           source={{
             uri: uri,
           }}
           style={[styles.avatar, {width: width, height: height}]}
         />
-      </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 Avatar.propTypes = {
-    onShowModal: PropTypes.func,
-    uri: PropTypes.string
+  onShowModal: PropTypes.func,
+  uri: PropTypes.string,
 };
 
 export default memo(Avatar);

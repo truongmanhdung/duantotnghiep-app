@@ -44,7 +44,7 @@ function NavBottom(props) {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: '#ff849c',
-          tabBarInactiveTintColor: 'gray',
+          tabBarInactiveTintColor: 'black',
         })}>
         <Tab.Screen
           name="Home"
@@ -54,7 +54,7 @@ function NavBottom(props) {
         <Tab.Screen name="Khóa học" component={CourseScreen} />
         <Tab.Screen name="Speak" component={SpeakScreen} />
         <Tab.Screen name="Message" options={{headerShown: false}} component={MessScreen} />
-        <Tab.Screen name="Cá nhân" component={ProfileScreen} />
+        <Tab.Screen name="Cá nhân" options={{headerShown: false}} component={ProfileScreen} />
       </Tab.Navigator>
   );
 }

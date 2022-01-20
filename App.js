@@ -20,6 +20,7 @@ import MessageDetailScreen from './src/screens/MessageDetailScreen';
 import MessScreen from "./src/screens/MessScreen";
 import NotificationScreen from './src/screens/NotificationScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import SettingScreen from './src/screens/SettingScreen';
  const styles = StyleSheet.create({
    container: {
      flex: 1,
@@ -70,6 +71,11 @@ import SearchScreen from './src/screens/SearchScreen';
                  options={{headerShown: false}}
                  name="MessageDetail"
                  component={MessageDetailScreen}
+               />
+               <Stack.Screen
+                 options={{headerShown: false}}
+                 name="setting"
+                 component={SettingScreen}
                />
              </Stack.Navigator>
            </NavigationContainer>
