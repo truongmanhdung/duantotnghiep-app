@@ -1,10 +1,18 @@
 import React, {useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  PermissionsAndroid,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import IconView from '../common/IconView';
 import Avatar from '../components/avatarComponent/Avatar';
 import Modal from 'react-native-modal';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 const styles = StyleSheet.create({
   container: {
     padding: 10,
@@ -20,6 +28,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  flexDirection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 15,
+    backgroundColor: '#e2e1e3',
+    borderColor: '#b9b7b9',
   },
   cameraIcon: {
     position: 'absolute',
@@ -61,13 +79,44 @@ const styles = StyleSheet.create({
     borderColor: '#c8c7c9',
   },
   iconModal: {
-    borderRadius: 100,  
+    borderRadius: 100,
     borderColor: 'black',
     borderWidth: 1,
     padding: 4,
   },
   textModal: {
     color: 'black',
+  },
+  flexBoxBorder: {
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  textBold: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  textLink: {
+    color: 'blue',
+  },
+  flexText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e1e3',
+    marginTop: 10,
+  },
+  btnOut: {
+    paddingTop: 10,
+    paddingBottom: 40,
+    marginLeft: 10,
+    borderTopWidth: 3,
+    marginRight: 10,
+    borderTopColor: '#e2e1e3'
   },
 });
 const user = {
@@ -79,29 +128,204 @@ const user = {
 function SettingScreen(props) {
   const navigation = useNavigation();
   const [isShowModal, setIsShowModal] = useState(false);
+  const [filePath, setFilePath] = useState(user);
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else return true;
+  };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
 
   const onShowModal = useCallback(() => {
     setIsShowModal(prev => !prev);
   }, []);
 
-  const onShowCamera = useCallback(() => {}, []);
+  const onShowCamera = useCallback(async () => {
+    let options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        console.log('Response = ', response);
 
-  const onShowMedia = useCallback(() => {}, []);
+        if (response.didCancel) {
+          alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          alert(response.errorMessage);
+
+          return;
+        }
+        console.log('base64 -> ', response.assets[0].uri);
+        console.log('uri -> ', response.assets[0].uri);
+        console.log('width -> ', response.assets[0].width);
+        console.log('height -> ', response.assets[0].height);
+        console.log('fileSize -> ', response.assets[0].fileSize);
+        console.log('type -> ', response.assets[0].type);
+        console.log('fileName -> ', response.assets[0].fileName);
+        setFilePath({
+          id: 1,
+          uri: response.assets[0].uri,
+          name: 'Trương Mạnh Dũng',
+          email: 'truongmanhdung04@gmail.com',
+        });
+      });
+    }
+  }, []);
+
+  const onShowMedia = useCallback(async () => {
+    let options = {
+      mediaType: 'photo',
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      durationLimit: 30,
+      saveToPhotos: true,
+    };
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchImageLibrary(options, response => {
+        console.log('Response = ', response);
+
+        // if (response.didCancel) {
+        //   alert('User cancelled camera picker');
+        //   return;
+        // } else if (response.errorCode == 'camera_unavailable') {
+        //   alert('Camera not available on device');
+        //   return;
+        // } else if (response.errorCode == 'permission') {
+        //   alert('Permission not satisfied');
+        //   return;
+        // } else if (response.errorCode == 'others') {
+        //   alert(response.errorMessage);
+        //   return;
+        // }
+        console.log('base64 -> ', response.assets[0].base64);
+        console.log('uri -> ', response.assets[0].uri);
+        console.log('width -> ', response.assets[0].width);
+        console.log('height -> ', response.assets[0].height);
+        console.log('fileSize -> ', response.assets[0].fileSize);
+        console.log('type -> ', response.assets[0].type);
+        console.log('fileName -> ', response.assets[0].fileName);
+        setFilePath({
+          id: 1,
+          uri: response.assets[0].uri,
+          name: 'Trương Mạnh Dũng',
+          email: 'truongmanhdung04@gmail.com',
+        });
+      });
+    }
+  }, []);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
         <IconView component="AntDesign" name="left" size={24} />
       </TouchableOpacity>
 
-      <View style={styles.camera}>
-        <TouchableOpacity style={styles.avatar} onPress={onShowModal}>
-          <Avatar width={85} height={85} uri={user.uri} />
-          <View style={styles.cameraIcon}>
-            <IconView size={20} component="Entypo" name="camera" />
+      <ScrollView>
+        <View style={styles.camera}>
+          <TouchableOpacity style={styles.avatar} onPress={onShowModal}>
+            <Avatar width={85} height={85} uri={filePath.uri} />
+            <View style={styles.cameraIcon}>
+              <IconView size={20} component="Entypo" name="camera" />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.flexBoxBorder}>
+          <Text style={{marginBottom: 5}}>Tên</Text>
+          <View style={styles.flexDirection}>
+            <Text style={styles.textBold}>{filePath.name}</Text>
+            <TouchableOpacity onPress={onShowModal} style={styles.textModal}>
+              <Text style={styles.textLink}>Thay đổi</Text>
+            </TouchableOpacity>
           </View>
+        </View>
+        <View style={styles.flexBoxBorder}>
+          <Text style={{marginBottom: 5}}>Email</Text>
+          <View style={styles.flexDirection}>
+            <Text style={styles.textBold}>{filePath.email}</Text>
+            <TouchableOpacity onPress={onShowModal} style={styles.textModal}>
+              <Text style={styles.textLink}>Thay đổi</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <Text
+          style={[
+            styles.textBold,
+            {marginTop: 20, marginLeft: 10, marginBottom: 10},
+          ]}>
+          Thông Tin về BeeHi
+        </Text>
+        <View style={styles.flexText}>
+          <Text>FAQ</Text>
+        </View>
+        <View style={styles.flexText}>
+          <Text>Báo cáo sự cố</Text>
+        </View>
+        <View style={styles.flexText}>
+          <Text>Bộ nhớ cache</Text>
+          <Text>14MB</Text>
+        </View>
+        <View style={styles.flexText}>
+          <Text>Phiên bản</Text>
+          <Text>1.0.0</Text>
+        </View>
+        <Text style={{marginBottom: 10, marginLeft: 10, marginTop: 10}}>
+          Thông tin ứng dụng
+        </Text>
+        <Text style={{marginBottom: 10, marginLeft: 10}}>
+          Chính sách bảo mật
+        </Text>
+        <Text style={{marginBottom: 10, marginLeft: 10}}>
+          Điều khoản sử dụng
+        </Text>
+        <Text style={{marginBottom: 10, marginLeft: 10}}>
+          Bản quyền nguồn mở
+        </Text>
+        <TouchableOpacity activeOpacity={0.8} style={styles.btnOut}>
+          <Text style={styles.textBold}>Đăng xuất</Text>
         </TouchableOpacity>
-      </View>
-
+      </ScrollView>
       {isShowModal && (
         <Modal
           style={{margin: 0}}
