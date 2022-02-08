@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
   ScrollView,
@@ -112,6 +112,11 @@ function MessageDetailScreen(props) {
     }
   }, [])
 
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const onShowKeyboard = useCallback(() => {
+    setIsShowKeyboard(true)
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -151,13 +156,14 @@ function MessageDetailScreen(props) {
           <View style={styles.flex}>
             <AntDesign style={styles.icon} name="pluscircle" size={20} style={{color: message.color}} />
             <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="camera" />
-            <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="image" />
+            <TouchableOpacity onPress={onShowKeyboard}>
+              <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="image" />
+            </TouchableOpacity>
             <FontAwesome style={styles.icon} size={20} style={{color: message.color}} name="microphone" />
           </View>
         )}
         <View style={[styles.viewInput, isFocus ? {width: '82%'} : {width: '40%'}]}>
           <TextInput
-            
             style={styles.input}
             onFocus={onFocusInput}
             placeholder="Aa"
@@ -165,6 +171,9 @@ function MessageDetailScreen(props) {
           <AntDesign name="meho" size={20} style={{color: message.color}} />
         </View>
         <AntDesign name="like1" size={20} style={{color: message.color}} />
+      </View>
+      <View>
+
       </View>
     </View>
   );
