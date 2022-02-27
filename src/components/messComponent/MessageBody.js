@@ -86,7 +86,7 @@ const data = [
 ]
 function MessageBody(props) {
   return (
-    <View>
+    <View style={{marginBottom: 80}}>
         {data.map((item) => (
             <View key={item.id} style={{marginTop: 10}}>
                 <MessageBodyItem message={item} />
